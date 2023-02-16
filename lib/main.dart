@@ -25,9 +25,8 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('TEST'),
-      ),
+      appBar: AppBarWidget(title: 'This is a test'),
+      backgroundColor: Colors.lightBlue,
     );
   }
 }
