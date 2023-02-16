@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// Widgets
+import 'package:weather_app/widgets/app_bar_widget.dart';
+
 void main() {
   runApp(App());
 }
@@ -23,7 +26,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('To Do Widget'),
+        title: Text('TEST'),
       ),
     );
   }
