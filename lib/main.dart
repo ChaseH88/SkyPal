@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // Widgets
 import 'package:weather_app/widgets/appstate_widget.dart';
@@ -7,7 +8,8 @@ import 'package:weather_app/widgets/app_bar_widget.dart';
 import 'package:weather_app/widgets/daysofweek_widget.dart';
 import 'package:weather_app/widgets/overview_widget.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(App());
 }
 

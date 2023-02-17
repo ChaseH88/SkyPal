@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
