@@ -16,11 +16,20 @@ void main() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AppState>(
-      create: (context) => AppState(),
-      child: MaterialApp(
-        home: WeatherWidget(),
-      ),
+    return FutureBuilder(
+      future: dotenv.load(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return ChangeNotifierProvider<AppState>(
+            create: (context) => AppState.createState(),
+            child: MaterialApp(
+              home: WeatherWidget(),
+            ),
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 }
@@ -37,9 +46,11 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     final container1Height = screenHeight * 0.15;
     final container2Height = screenHeight * 0.35;
     final container3Height = screenHeight * 0.285;
+    final appState = AppState.of(context);
+    final api = appState.api;
 
     Future<void> handleRefresh() async {
-      print('refreshing');
+      await api.getWeather();
     }
 
     return Scaffold(

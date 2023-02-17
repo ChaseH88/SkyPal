@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../classes/api.dart';
+
 class AppState with ChangeNotifier {
   DateTime _currentDay;
   List<DateTime> _next14Days;
   DateTime _selectedDay;
+  final API api;
 
   AppState({
     DateTime currentDay,
     List<DateTime> next14Days,
     DateTime selectedDay,
+    this.api,
   })  : _currentDay = currentDay ?? DateTime.now(),
         _next14Days = next14Days ??
             List.generate(
@@ -39,10 +43,13 @@ class AppState with ChangeNotifier {
     List<DateTime> next14Days,
     DateTime selectedDay,
   }) {
+    final api = API();
+
     return AppState(
       currentDay: currentDay,
       next14Days: next14Days,
       selectedDay: selectedDay,
+      api: api,
     );
   }
 }
