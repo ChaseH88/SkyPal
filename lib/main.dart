@@ -34,26 +34,35 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final container1Height = screenHeight * 0.25;
+    final container1Height = screenHeight * 0.15;
     final container2Height = screenHeight * 0.35;
     final container3Height = screenHeight * 0.285;
+
+    Future<void> handleRefresh() async {
+      print('refreshing');
+    }
 
     return Scaffold(
       appBar: AppBarWidget(title: 'This is a test'),
       backgroundColor: Colors.lightBlue,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          OverviewWidget(),
-          DaysOfWeekWidget(),
-          Container(
-              color: Colors.transparent,
-              constraints: BoxConstraints(
-                minHeight: container3Height,
-                maxHeight: screenHeight - container1Height - container2Height,
-              ),
-              child: Text('Widget 3')),
-        ],
+      body: RefreshIndicator(
+        onRefresh: handleRefresh,
+        child: ListView(
+          children: [
+            Container(
+              height: container1Height,
+              child: OverviewWidget(),
+            ),
+            Container(
+              height: container2Height,
+              child: DaysOfWeekWidget(),
+            ),
+            Container(
+              height: container3Height,
+              child: Text('Container 3'),
+            ),
+          ],
+        ),
       ),
     );
   }
