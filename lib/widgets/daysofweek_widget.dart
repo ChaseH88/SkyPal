@@ -6,8 +6,6 @@ import './appstate_widget.dart';
 class DaysOfWeekWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final appState = AppState.from(context);
-
     final appState = Provider.of<AppState>(context, listen: true);
 
     // Calculate the box width based on the screen size
