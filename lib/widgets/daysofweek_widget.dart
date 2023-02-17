@@ -1,11 +1,14 @@
 import "package:flutter/material.dart";
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import './appstate_widget.dart';
 
 class DaysOfWeekWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appState = AppState.from(context);
+    // final appState = AppState.from(context);
+
+    final appState = Provider.of<AppState>(context, listen: true);
 
     // Calculate the box width based on the screen size
     final mediaQueryData = MediaQuery.of(context);
@@ -19,9 +22,7 @@ class DaysOfWeekWidget extends StatelessWidget {
     for (DateTime date in appState.next14Days) {
       dayBoxes.add(GestureDetector(
         onTap: () {
-          if (appState.handleUpdateSelectedDay != null) {
-            appState.handleUpdateSelectedDay(date);
-          }
+          appState.updateSelectedDay(date);
         },
         child: Container(
           width: boxWidth,

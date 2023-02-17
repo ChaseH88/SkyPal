@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 // Widgets
 import 'package:weather_app/widgets/appstate_widget.dart';
@@ -14,8 +14,11 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: WeatherWidget(),
+    return ChangeNotifierProvider<AppState>(
+      create: (context) => AppState(),
+      child: MaterialApp(
+        home: WeatherWidget(),
+      ),
     );
   }
 }
@@ -33,8 +36,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     final container2Height = screenHeight * 0.35;
     final container3Height = screenHeight * 0.285;
 
-    return AppState(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBarWidget(title: 'This is a test'),
       backgroundColor: Colors.lightBlue,
       body: Column(
@@ -51,6 +53,6 @@ class _WeatherWidgetState extends State<WeatherWidget> {
               child: Text('Widget 3')),
         ],
       ),
-    ));
+    );
   }
 }
