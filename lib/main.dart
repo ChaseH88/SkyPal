@@ -58,10 +58,12 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     final api = appState.api;
 
     Future<void> handleRefresh() async {
-      await api.getWeather(
+      final data = await api.getWeather(
           latitude: appState.latitude,
           longitude: appState.longitude,
           dropCache: false);
+      print('========================');
+      print(data);
     }
 
     return FutureBuilder(

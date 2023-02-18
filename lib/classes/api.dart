@@ -1,15 +1,12 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class API {
-  static const String _baseUrl = 'https://api.weatherbit.io/v2.0';
+  static const String _baseUrl = 'http://192.168.1.203:4001';
   static String _apiKey = '';
-  static const Map<String, String> _headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  };
   final cacheManager = CacheManager(
     Config(
       'weather_data_cache',
@@ -24,36 +21,48 @@ class API {
     });
   }
 
-  Future<http.Response> getWeather({
+  static Map<String, String> get _headers => {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'x-api-key': _apiKey,
+      };
+
+  Future<Map<String, dynamic>> getWeather({
     double latitude,
     double longitude,
     bool dropCache = false,
   }) async {
-    final url = Uri.parse(
-        '$_baseUrl/forecast/daily?lat=$latitude&lon=$longitude&key=$_apiKey');
+    final url =
+        Uri.parse('$_baseUrl/dummy?latitude=$latitude&longitude=$longitude');
+    print(url);
+    print(_headers);
 
     if (dropCache) {
       // Delete the cached response if dropCache is true
+      print("DROP CACHE: $url");
       await cacheManager.removeFile(url.toString());
     }
 
     // Try to fetch the response from cache first
     final fileInfo = await cacheManager.getFileFromCache(url.toString());
+    print("File Info: $fileInfo");
     if (fileInfo != null) {
       final file = fileInfo.file;
       final contents = await file.readAsString();
-      // TODO: Fix type and convert to readable JSON
-      print(contents);
-      return contents;
+      final decodedJson = jsonDecode(contents);
+      print('========== FROM CACHE ==========');
+      return decodedJson;
     }
 
     // If cache is empty or stale, fetch the response from the network and cache it
     final response = await http.get(url, headers: _headers);
     if (response.statusCode == 200) {
+      final decodedJson = jsonDecode(response.body);
       await cacheManager.putFile(url.toString(), response.bodyBytes);
+      print('========== FROM NETWORK ==========');
+      return decodedJson;
     }
 
-    // TODO: Will need to return the response in desired format
-    return response;
+    return null;
   }
 }
