@@ -41,6 +41,14 @@ class WeatherWidget extends StatefulWidget {
 
 class _WeatherWidgetState extends State<WeatherWidget> {
   @override
+  void initState() {
+    super.initState();
+    final appState = AppState.of(context);
+    final updateCurrentPosition = appState.updateCurrentPosition;
+    updateCurrentPosition();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final container1Height = screenHeight * 0.15;
@@ -50,31 +58,42 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     final api = appState.api;
 
     Future<void> handleRefresh() async {
-      await api.getWeather();
+      await api.getWeather(appState.latitude, appState.longitude);
+      print(appState.latitude);
+      print(appState.longitude);
     }
 
-    return Scaffold(
-      appBar: AppBarWidget(title: 'This is a test'),
-      backgroundColor: Colors.lightBlue,
-      body: RefreshIndicator(
-        onRefresh: handleRefresh,
-        child: ListView(
-          children: [
-            Container(
-              height: container1Height,
-              child: OverviewWidget(),
+    return FutureBuilder(
+      future: appState.updateCurrentPosition(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          return Scaffold(
+            appBar: AppBarWidget(title: 'This is a test'),
+            backgroundColor: Colors.lightBlue,
+            body: RefreshIndicator(
+              onRefresh: handleRefresh,
+              child: ListView(
+                children: [
+                  Container(
+                    height: container1Height,
+                    child: OverviewWidget(),
+                  ),
+                  Container(
+                    height: container2Height,
+                    child: DaysOfWeekWidget(),
+                  ),
+                  Container(
+                    height: container3Height,
+                    child: Text('Container 3'),
+                  ),
+                ],
+              ),
             ),
-            Container(
-              height: container2Height,
-              child: DaysOfWeekWidget(),
-            ),
-            Container(
-              height: container3Height,
-              child: Text('Container 3'),
-            ),
-          ],
-        ),
-      ),
+          );
+        }
+      },
     );
   }
 }

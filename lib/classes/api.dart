@@ -15,12 +15,10 @@ class API {
     });
   }
 
-  void getWeather() async {
+  void getWeather(double latitude, double longitude) async {
     try {
-      const latitute = 51.5074;
-      const double longitude = 0.1278;
       final url = Uri.parse(
-          '$_baseUrl/forecast/daily?lat=$latitute&lon=$longitude&key=$_apiKey');
+          '$_baseUrl/forecast/daily?lat=$latitude&lon=$longitude&key=$_apiKey');
       final response = await http.get(url, headers: _headers);
       print(response.body);
     } catch (e) {
