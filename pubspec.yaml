@@ -33,6 +33,7 @@ dependencies:
   http: ^0.13.5
   flutter_dotenv: ^5.0.2
   geolocator: ^9.0.2
+  flutter_cache_manager: ^3.3.0
 
 dev_dependencies:
   flutter_test:
