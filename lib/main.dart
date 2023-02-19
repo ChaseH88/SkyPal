@@ -46,6 +46,21 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     final appState = AppState.of(context);
     final updateCurrentPosition = appState.updateCurrentPosition;
     updateCurrentPosition();
+    final api = appState.api;
+    final updateAppState = appState.updateAppState;
+    api
+        .getWeather(
+            latitude: appState.latitude,
+            longitude: appState.longitude,
+            dropCache: false)
+        .then((data) {
+      updateAppState(
+        locationData: data['location'],
+        currentWeatherData: data['currentWeather'],
+        futureWeatherData: data['futureWeather'],
+        severeAlertsData: data['severeAlerts'],
+      );
+    });
   }
 
   @override
@@ -74,7 +89,8 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     return FutureBuilder(
       future: appState.updateCurrentPosition(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting ||
+            appState.loading) {
           return const CircularProgressIndicator();
         } else {
           return Scaffold(
