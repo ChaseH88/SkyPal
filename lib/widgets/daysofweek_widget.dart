@@ -17,7 +17,8 @@ class DaysOfWeekWidget extends StatelessWidget {
 
     // Create a list of day name boxes
     List<Widget> dayBoxes = [];
-    for (DateTime date in appState.next14Days) {
+    for (int i = 0; i < 14; i++) {
+      DateTime date = appState.currentDay.add(Duration(days: i));
       dayBoxes.add(GestureDetector(
         onTap: () {
           appState.updateSelectedDay(date);
