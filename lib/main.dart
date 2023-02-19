@@ -40,19 +40,18 @@ class WeatherWidget extends StatefulWidget {
 }
 
 class _WeatherWidgetState extends State<WeatherWidget> {
-  @override
-  void initState() {
-    super.initState();
+  void fetchWeatherData(BuildContext context) {
     final appState = AppState.of(context);
-    final updateCurrentPosition = appState.updateCurrentPosition;
-    updateCurrentPosition();
     final api = appState.api;
     final updateAppState = appState.updateAppState;
+    final updateCurrentPosition = appState.updateCurrentPosition;
+
     api
         .getWeather(
-            latitude: appState.latitude,
-            longitude: appState.longitude,
-            dropCache: false)
+      latitude: appState.latitude,
+      longitude: appState.longitude,
+      dropCache: false,
+    )
         .then((data) {
       updateAppState(
         locationData: data['location'],
@@ -61,6 +60,14 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         severeAlertsData: data['severeAlerts'],
       );
     });
+
+    updateCurrentPosition();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWeatherData(context);
   }
 
   @override
@@ -70,20 +77,9 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     final container2Height = screenHeight * 0.35;
     final container3Height = screenHeight * 0.285;
     final appState = AppState.of(context);
-    final api = appState.api;
-    final updateAppState = appState.updateAppState;
 
     Future<void> handleRefresh() async {
-      final data = await api.getWeather(
-          latitude: appState.latitude,
-          longitude: appState.longitude,
-          dropCache: false);
-      updateAppState(
-        locationData: data['location'],
-        currentWeatherData: data['currentWeather'],
-        futureWeatherData: data['futureWeather'],
-        severeAlertsData: data['severeAlerts'],
-      );
+      fetchWeatherData(context);
     }
 
     return FutureBuilder(
