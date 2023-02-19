@@ -11,6 +11,11 @@ class AppState with ChangeNotifier {
   bool _locationPermissionGranted;
   double _latitude;
   double _longitude;
+  dynamic _locationData;
+  dynamic _currentWeatherData;
+  dynamic _futureWeatherData;
+  dynamic _severeAlertsData;
+  bool _loading = true;
 
   AppState({
     DateTime currentDay,
@@ -20,28 +25,36 @@ class AppState with ChangeNotifier {
     bool locationPermissionGranted,
     double latitude,
     double longitude,
+    dynamic locationData,
+    dynamic currentWeatherData,
+    dynamic futureWeatherData,
+    dynamic severeAlertsData,
   })  : _currentDay = currentDay ?? DateTime.now(),
         _selectedDay = selectedDay ?? DateTime.now(),
         _currentPosition = currentPosition,
         _locationPermissionGranted = locationPermissionGranted,
         _latitude = latitude,
-        _longitude = longitude;
+        _longitude = longitude,
+        _locationData = locationData,
+        _currentWeatherData = currentWeatherData,
+        _futureWeatherData = futureWeatherData,
+        _severeAlertsData = severeAlertsData;
 
   static AppState of(BuildContext context) {
     return Provider.of<AppState>(context, listen: false);
   }
 
   DateTime get currentDay => _currentDay;
-
   DateTime get selectedDay => _selectedDay;
-
   Position get currentPosition => _currentPosition;
-
   bool get locationPermissionGranted => _locationPermissionGranted;
-
   double get latitude => _latitude;
-
   double get longitude => _longitude;
+  dynamic get locationData => _locationData;
+  dynamic get currentWeatherData => _currentWeatherData;
+  dynamic get futureWeatherData => _futureWeatherData;
+  dynamic get severeAlertsData => _severeAlertsData;
+  bool get loading => _loading;
 
   void updateSelectedDay(DateTime newSelectedDay) {
     _selectedDay = newSelectedDay;
@@ -63,6 +76,20 @@ class AppState with ChangeNotifier {
     _latitude = _currentPosition.latitude;
     _longitude = _currentPosition.longitude;
     _locationPermissionGranted = true;
+    notifyListeners();
+  }
+
+  Future<void> updateAppState({
+    dynamic locationData,
+    dynamic currentWeatherData,
+    dynamic futureWeatherData,
+    dynamic severeAlertsData,
+  }) async {
+    _locationData = locationData;
+    _currentWeatherData = currentWeatherData;
+    _futureWeatherData = futureWeatherData;
+    _severeAlertsData = severeAlertsData;
+    _loading = false;
     notifyListeners();
   }
 

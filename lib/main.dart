@@ -56,12 +56,19 @@ class _WeatherWidgetState extends State<WeatherWidget> {
     final container3Height = screenHeight * 0.285;
     final appState = AppState.of(context);
     final api = appState.api;
+    final updateAppState = appState.updateAppState;
 
     Future<void> handleRefresh() async {
       final data = await api.getWeather(
           latitude: appState.latitude,
           longitude: appState.longitude,
           dropCache: false);
+      updateAppState(
+        locationData: data['location'],
+        currentWeatherData: data['currentWeather'],
+        futureWeatherData: data['futureWeather'],
+        severeAlertsData: data['severeAlerts'],
+      );
     }
 
     return FutureBuilder(

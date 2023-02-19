@@ -7,12 +7,15 @@ class OverviewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: true);
 
+    print("Testing: $appState.currentWeatherData");
+
     return Container(
       child: Column(
         children: [
           Container(
             color: Colors.transparent,
-            child: Text('68'),
+            child: Text(
+                appState.currentWeatherData['temperature'] ?? 'Loading...'),
           ),
           Container(
             color: Colors.transparent,
