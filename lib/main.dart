@@ -62,8 +62,6 @@ class _WeatherWidgetState extends State<WeatherWidget> {
           latitude: appState.latitude,
           longitude: appState.longitude,
           dropCache: false);
-      print('========================');
-      print(data);
     }
 
     return FutureBuilder(

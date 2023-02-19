@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -34,18 +33,15 @@ class API {
   }) async {
     final url =
         Uri.parse('$_baseUrl/dummy?latitude=$latitude&longitude=$longitude');
-    print(url);
-    print(_headers);
 
     if (dropCache) {
       // Delete the cached response if dropCache is true
-      print("DROP CACHE: $url");
+      print("========== DROP CACHE: $url ==========");
       await cacheManager.removeFile(url.toString());
     }
 
     // Try to fetch the response from cache first
     final fileInfo = await cacheManager.getFileFromCache(url.toString());
-    print("File Info: $fileInfo");
     if (fileInfo != null) {
       final file = fileInfo.file;
       final contents = await file.readAsString();
