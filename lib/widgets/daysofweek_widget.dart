@@ -15,19 +15,26 @@ class DaysOfWeekWidget extends StatelessWidget {
     double boxWidth = screenWidth * 0.2;
     double boxHeight = screenHeight * 0.1;
 
+    // will need to loop over appState.futureWeatherData and create a list of boxes
+    // each box will have a date and a weather icon
+
     // Create a list of day name boxes
-    List<Widget> dayBoxes = [];
-    for (int i = 0; i < 14; i++) {
-      DateTime date = appState.currentDay.add(Duration(days: i));
-      dayBoxes.add(GestureDetector(
+    List<Widget> dayWeatherBoxes = [];
+    appState.futureWeatherData.forEach((weatherData) {
+      DateTime date = DateTime.parse(weatherData['valid_date']);
+      dayWeatherBoxes.add(GestureDetector(
         onTap: () {
           appState.updateSelectedDay(date);
         },
         child: Container(
           width: boxWidth,
           height: boxHeight,
-          child: Center(
-            child: Text(DateFormat('EEEE, MMM d').format(date)),
+          child: Column(
+            children: [
+              Text(DateFormat('EEEE, MMM d').format(date)),
+              Text(weatherData['temp']),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
           decoration: BoxDecoration(
             border: Border.all(
@@ -37,13 +44,13 @@ class DaysOfWeekWidget extends StatelessWidget {
           ),
         ),
       ));
-    }
+    });
 
     // Return a row of boxes, with the width and height scaled based on the screen size
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: dayBoxes,
+        children: dayWeatherBoxes,
       ),
     );
   }
