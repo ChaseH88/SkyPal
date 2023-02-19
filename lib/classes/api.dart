@@ -17,7 +17,7 @@ class API {
 
   API() {
     dotenv.load().then((value) {
-      _apiKey = dotenv.env['WEATHER_BIT_API_KEY'];
+      _apiKey = dotenv.env['API_KEY'];
     });
   }
 
