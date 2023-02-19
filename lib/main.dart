@@ -73,7 +73,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final container1Height = screenHeight * 0.15;
+    final container1Height = screenHeight * 0.35;
     final container2Height = screenHeight * 0.35;
     final container3Height = screenHeight * 0.285;
     final appState = AppState.of(context);
