@@ -8,6 +8,7 @@ import 'package:weather_app/widgets/app_bar_widget.dart';
 import 'package:weather_app/widgets/daysofweek_widget.dart';
 import 'package:weather_app/widgets/overview_widget.dart';
 import 'package:weather_app/widgets/details_widget.dart';
+import 'package:weather_app/widgets/loading_widget.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -18,7 +19,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: dotenv.load(),
+      future: Future.delayed(Duration(seconds: 1), () => dotenv.load()),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return ChangeNotifierProvider<AppState>(
@@ -28,7 +29,7 @@ class App extends StatelessWidget {
             ),
           );
         } else {
-          return const CircularProgressIndicator();
+          return MaterialApp(home: LoadingScreen());
         }
       },
     );
@@ -51,7 +52,6 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         .getWeather(
       latitude: appState.latitude,
       longitude: appState.longitude,
-      dropCache: false,
     )
         .then((data) {
       updateAppState(
@@ -86,7 +86,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting ||
             appState.loading) {
-          return const CircularProgressIndicator();
+          return LoadingScreen();
         } else {
           return Scaffold(
             appBar: AppBarWidget(title: 'This is a test'),
