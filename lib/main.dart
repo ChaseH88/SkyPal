@@ -7,6 +7,7 @@ import 'package:weather_app/widgets/appstate_widget.dart';
 import 'package:weather_app/widgets/app_bar_widget.dart';
 import 'package:weather_app/widgets/daysofweek_widget.dart';
 import 'package:weather_app/widgets/overview_widget.dart';
+import 'package:weather_app/widgets/details_widget.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -71,9 +72,9 @@ class _WeatherWidgetState extends State<WeatherWidget> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final container1Height = screenHeight * 0.35;
-    final container2Height = screenHeight * 0.35;
-    final container3Height = screenHeight * 0.285;
+    final container1Height = screenHeight * 0.2;
+    final container2Height = screenHeight * 0.3;
+    final container3Height = screenHeight * 0.5;
     final appState = AppState.of(context);
 
     Future<void> handleRefresh() async {
@@ -104,7 +105,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
                   ),
                   Container(
                     height: container3Height,
-                    child: Text('Container 3'),
+                    child: DetailsWidget(),
                   ),
                 ],
               ),
