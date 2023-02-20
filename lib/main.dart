@@ -55,9 +55,7 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         .then((data) {
       updateAppState(
         locationData: data['location'],
-        currentWeatherData: data['currentWeather'],
-        futureWeatherData: data['futureWeather'],
-        severeAlertsData: data['severeAlerts'],
+        currentWeatherData: data['weatherData'],
       );
     });
 

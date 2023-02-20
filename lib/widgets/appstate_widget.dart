@@ -5,7 +5,7 @@ import '../classes/api.dart';
 
 class AppState with ChangeNotifier {
   DateTime _currentDay;
-  DateTime _selectedDay;
+  String _selectedDay;
   final API api;
   Position _currentPosition;
   bool _locationPermissionGranted;
@@ -13,13 +13,11 @@ class AppState with ChangeNotifier {
   double _longitude;
   dynamic _locationData;
   dynamic _currentWeatherData;
-  dynamic _futureWeatherData;
-  dynamic _severeAlertsData;
   bool _loading = true;
 
   AppState({
     DateTime currentDay,
-    DateTime selectedDay,
+    String selectedDay,
     this.api,
     Position currentPosition,
     bool locationPermissionGranted,
@@ -27,36 +25,30 @@ class AppState with ChangeNotifier {
     double longitude,
     dynamic locationData,
     dynamic currentWeatherData,
-    dynamic futureWeatherData,
-    dynamic severeAlertsData,
   })  : _currentDay = currentDay ?? DateTime.now(),
-        _selectedDay = selectedDay ?? DateTime.now(),
+        _selectedDay = selectedDay,
         _currentPosition = currentPosition,
         _locationPermissionGranted = locationPermissionGranted,
         _latitude = latitude,
         _longitude = longitude,
         _locationData = locationData,
-        _currentWeatherData = currentWeatherData,
-        _futureWeatherData = futureWeatherData,
-        _severeAlertsData = severeAlertsData;
+        _currentWeatherData = currentWeatherData;
 
   static AppState of(BuildContext context) {
     return Provider.of<AppState>(context, listen: false);
   }
 
   DateTime get currentDay => _currentDay;
-  DateTime get selectedDay => _selectedDay;
+  String get selectedDay => _selectedDay;
   Position get currentPosition => _currentPosition;
   bool get locationPermissionGranted => _locationPermissionGranted;
   double get latitude => _latitude;
   double get longitude => _longitude;
   dynamic get locationData => _locationData;
   dynamic get currentWeatherData => _currentWeatherData;
-  dynamic get futureWeatherData => _futureWeatherData;
-  dynamic get severeAlertsData => _severeAlertsData;
   bool get loading => _loading;
 
-  void updateSelectedDay(DateTime newSelectedDay) {
+  void updateSelectedDay(String newSelectedDay) {
     _selectedDay = newSelectedDay;
     notifyListeners();
   }
@@ -82,13 +74,10 @@ class AppState with ChangeNotifier {
   Future<void> updateAppState({
     dynamic locationData,
     dynamic currentWeatherData,
-    dynamic futureWeatherData,
-    dynamic severeAlertsData,
   }) async {
     _locationData = locationData;
     _currentWeatherData = currentWeatherData;
-    _futureWeatherData = futureWeatherData;
-    _severeAlertsData = severeAlertsData;
+    _selectedDay = currentWeatherData.first['id'];
     _loading = false;
     notifyListeners();
   }
@@ -96,7 +85,7 @@ class AppState with ChangeNotifier {
   // Factory constructor to create the AppState object.
   factory AppState.createState({
     DateTime currentDay,
-    DateTime selectedDay,
+    String selectedDay,
   }) {
     final api = API();
 

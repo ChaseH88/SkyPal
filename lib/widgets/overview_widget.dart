@@ -6,15 +6,19 @@ class OverviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context, listen: true);
-
-    print("Testing: $appState.currentWeatherData");
+    final currentWeatherData = appState.currentWeatherData;
+    final selectedDay = appState.selectedDay;
+    final selectedDayData = currentWeatherData.firstWhere(
+      (day) => day['id'] == selectedDay,
+      orElse: () => null,
+    );
 
     return Container(
       child: Column(
         children: [
           Container(
             child: Text(
-              appState.currentWeatherData['temperature'],
+              selectedDayData['temperature'],
               style: TextStyle(
                 fontSize: 50,
                 color: Colors.white,
@@ -24,7 +28,7 @@ class OverviewWidget extends StatelessWidget {
           ),
           Container(
             child: Text(
-              appState.currentWeatherData['weather_description'],
+              selectedDayData['weather_description'],
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,

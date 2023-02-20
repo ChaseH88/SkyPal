@@ -20,25 +20,25 @@ class DaysOfWeekWidget extends StatelessWidget {
 
     // Create a list of day name boxes
     List<Widget> dayWeatherBoxes = [];
-    appState.futureWeatherData.forEach((weatherData) {
-      DateTime date = DateTime.parse(weatherData['valid_date']);
+    appState.currentWeatherData.forEach((day) {
+      String dateTime =
+          DateFormat('dd/MM').format(DateTime.parse(day['datetime']));
       dayWeatherBoxes.add(GestureDetector(
+        key: ValueKey(day['id']),
         onTap: () {
-          appState.updateSelectedDay(date);
+          appState.updateSelectedDay(day['id']);
         },
         child: Container(
           width: boxWidth,
           height: boxHeight,
           child: Column(
-            children: [
-              Text(DateFormat('EEEE, MMM d').format(date)),
-              Text(weatherData['temp']),
-            ],
+            children: [Text(day['temperature']), Text(dateTime)],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
           decoration: BoxDecoration(
             border: Border.all(
-              color: date == appState.selectedDay ? Colors.blue : Colors.grey,
+              color:
+                  day['id'] == appState.selectedDay ? Colors.blue : Colors.grey,
               width: 2,
             ),
           ),
