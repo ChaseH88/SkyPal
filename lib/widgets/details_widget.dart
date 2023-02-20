@@ -34,7 +34,13 @@ class DetailsWidget extends StatelessWidget {
     Container buildContainer(String key, String val) {
       return Container(
         height: 10,
-        color: Colors.transparent,
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          border: Border.all(
+            color: Colors.white,
+            width: 1.0,
+          ),
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -61,26 +67,22 @@ class DetailsWidget extends StatelessWidget {
 
     return PageView(
       children: [
-        PageView(
-          children: [
-            GridView.count(
-              crossAxisCount: 3,
-              childAspectRatio: 1.0,
-              physics: NeverScrollableScrollPhysics(),
-              children: page1.entries.map((e) {
-                return buildContainer(e.key, e.value.toString());
-              }).toList(),
-            ),
-            GridView.count(
-              crossAxisCount: 3,
-              childAspectRatio: 1.0,
-              physics: NeverScrollableScrollPhysics(),
-              children: page2.entries.map((e) {
-                return buildContainer(e.key, e.value.toString());
-              }).toList(),
-            )
-          ],
+        GridView.count(
+          padding: EdgeInsets.zero,
+          crossAxisCount: 3,
+          childAspectRatio: 1.0,
+          children: page1.entries.map((e) {
+            return buildContainer(e.key, e.value.toString());
+          }).toList(),
         ),
+        GridView.count(
+          padding: EdgeInsets.zero,
+          crossAxisCount: 3,
+          childAspectRatio: 1.0,
+          children: page2.entries.map((e) {
+            return buildContainer(e.key, e.value.toString());
+          }).toList(),
+        )
       ],
     );
   }
