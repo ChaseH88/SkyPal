@@ -29,7 +29,10 @@ class App extends StatelessWidget {
             ),
           );
         } else {
-          return MaterialApp(home: LoadingScreen());
+          return MaterialApp(
+              home: LoadingScreen(
+            text: 'Starting App...',
+          ));
         }
       },
     );
@@ -42,12 +45,20 @@ class WeatherWidget extends StatefulWidget {
 }
 
 class _WeatherWidgetState extends State<WeatherWidget> {
-  void fetchWeatherData(BuildContext context) {
+  Future<void> _initializeAppState(BuildContext context) async {
+    try {
+      final appState = AppState.of(context);
+      appState.updateCurrentPosition().then((value) => null);
+      fetchWeatherData(context).then((value) => null);
+    } catch (e) {
+      print("Error initializing app state: $e");
+    }
+  }
+
+  Future<void> fetchWeatherData(BuildContext context) async {
     final appState = AppState.of(context);
     final api = appState.api;
     final updateAppState = appState.updateAppState;
-    final updateCurrentPosition = appState.updateCurrentPosition;
-
     api
         .getWeather(
       latitude: appState.latitude,
@@ -59,14 +70,12 @@ class _WeatherWidgetState extends State<WeatherWidget> {
         currentWeatherData: data['weatherData'],
       );
     });
-
-    updateCurrentPosition();
   }
 
   @override
   void initState() {
     super.initState();
-    fetchWeatherData(context);
+    _initializeAppState(context);
   }
 
   @override
@@ -86,7 +95,11 @@ class _WeatherWidgetState extends State<WeatherWidget> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting ||
             appState.loading) {
-          return LoadingScreen();
+          return LoadingScreen(
+            text: snapshot.connectionState == ConnectionState.waiting
+                ? 'Getting your location...'
+                : 'Loading weather data...',
+          );
         } else {
           return Scaffold(
             appBar: AppBarWidget(title: 'This is a test'),

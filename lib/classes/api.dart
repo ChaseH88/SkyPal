@@ -46,7 +46,7 @@ class API {
       final file = fileInfo.file;
       final contents = await file.readAsString();
       final decodedJson = jsonDecode(contents);
-      print('========== FROM CACHE ==========');
+      print('========== LOADED FROM CACHE ==========');
       return decodedJson;
     }
 
@@ -55,7 +55,7 @@ class API {
     if (response.statusCode == 200) {
       final decodedJson = jsonDecode(response.body);
       await cacheManager.putFile(url.toString(), response.bodyBytes);
-      print('========== FROM NETWORK ==========');
+      print('========== LOADED FROM NETWORK ==========');
       return decodedJson;
     }
 

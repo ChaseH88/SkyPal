@@ -54,21 +54,25 @@ class AppState with ChangeNotifier {
   }
 
   Future<void> updateCurrentPosition() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
-        _currentPosition = null;
-        _locationPermissionGranted = false;
-        return;
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          _currentPosition = null;
+          _locationPermissionGranted = false;
+          return;
+        }
       }
+      _currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      _latitude = _currentPosition.latitude;
+      _longitude = _currentPosition.longitude;
+      _locationPermissionGranted = true;
+      return;
+    } catch (e) {
+      print('error updating current position in app state: $e');
     }
-    _currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    _latitude = _currentPosition.latitude;
-    _longitude = _currentPosition.longitude;
-    _locationPermissionGranted = true;
-    notifyListeners();
   }
 
   Future<void> updateAppState({
